@@ -27,6 +27,7 @@ class Weather(BaseTool):
         self.description = '通过城市或地域名获取天气'
         self.variable_description = [('location','string','需要查询天气的地名，缺省值为NULL，此时默认查询廊坊市广阳区(本地地址)')]
 
+        self.baidu_map_api_key = 'your api key'
         self.location_retriever = LocationRetriever()
 
 
@@ -37,7 +38,7 @@ class Weather(BaseTool):
             location_id = self.location_retriever.find_postal_code(location_name)
         if location_id==-1:
             return {'error':f'所给出的地区名{location_name}可能有误'}
-        url = f"https://api.map.baidu.com/weather/v1/?district_id={location_id}&data_type=all&ak=fq3K3tPEar3JR6aaDT5O49c8fXiYPhTN"
+        url = f"https://api.map.baidu.com/weather/v1/?district_id={location_id}&data_type=all&ak={self.baidu_map_api_key}"
         data = requests.get(url).json()
         weather_data = {
             'location':data['result']['location'],
@@ -49,9 +50,3 @@ class Weather(BaseTool):
             'the fifth day':data['result']['forecasts'][4],
         }
         return weather_data
-
-if __name__ == '__main__':
-    url = f"https://api.map.baidu.com/weather/v1/?district_id=131003&data_type=all&ak=fq3K3tPEar3JR6aaDT5O49c8fXiYPhTN"
-    data = requests.get(url).json()
-    data=json.dumps(data,indent=4,ensure_ascii=False)
-    print(data)
