@@ -12,7 +12,7 @@ message = {
     'role':'user',
     'content':
 """
-提瓦特大陆现在天气怎么样
+现在天气怎么样
 """
 }
 tools=[Weather()]
